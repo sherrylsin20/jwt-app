@@ -54,4 +54,17 @@ class UserController extends Controller
             'msg' => 'Logout berhasil'
         ], 200);
     }
+
+    public function me()
+    {
+        return response()->json([
+            'data' => auth()->user()
+        ], 200);
+    }
+
+    public function index()
+    {
+        $users = User::all();
+        return $users;
+    }
 }
