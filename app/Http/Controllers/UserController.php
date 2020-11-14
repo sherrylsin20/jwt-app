@@ -67,4 +67,9 @@ class UserController extends Controller
         $users = User::all();
         return $users;
     }
+
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+    }
 }
