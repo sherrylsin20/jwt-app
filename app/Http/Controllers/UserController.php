@@ -8,6 +8,18 @@ use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+    }
+
+    public function index()
+    {
+        $users = User::all();
+        return $users;
+    }
+
     public function register(Request $request)
     {
         $this->validate($request, [
@@ -43,7 +55,7 @@ class UserController extends Controller
                 'access_token' => $token,
                 'token_type' => 'bearer',
                 'expires_in' => auth()->factory()->getTTL() * 60
-            ], 401);
+            ], 200);
         }
     }
 
@@ -61,15 +73,5 @@ class UserController extends Controller
             'data' => auth()->user()
         ], 200);
     }
-
-    public function index()
-    {
-        $users = User::all();
-        return $users;
-    }
-
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
+    
 }
