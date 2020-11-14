@@ -25,4 +25,33 @@ class UserController extends Controller
         $user = User::create($attributes);
         return $user;
     }
+
+    public function login(Request $request)
+    {
+        $this->validate($request, [
+            'username' => 'required',
+            'password' => 'required'
+        ]);
+
+        $credentials = request(['username', 'password']);
+        if(!$token = auth()->attempt($credentials)) {
+            return response()->json([
+                'msg' => 'login gagal'
+            ], 401);
+        } else {
+            return response()->json([
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => auth()->factory()->getTTL() * 60
+            ], 401);
+        }
+    }
+
+    public function logout()
+    {
+        auth()->logout();
+        return response()->json([
+            'msg' => 'Logout berhasil'
+        ], 200);
+    }
 }
